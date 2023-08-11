@@ -1,1 +1,165 @@
-(function(i,r){typeof exports=="object"&&typeof module<"u"?module.exports=r():typeof define=="function"&&define.amd?define(r):(i=typeof globalThis<"u"?globalThis:i||self,i.index=i.index||{},i.index.js=r())})(this,function(){"use strict";var h=Object.defineProperty;var a=(i,r,t)=>r in i?h(i,r,{enumerable:!0,configurable:!0,writable:!0,value:t}):i[r]=t;var s=(i,r,t)=>(a(i,typeof r!="symbol"?r+"":r,t),t);class i{constructor(t,e){s(this,"url");s(this,"opts");s(this,"ws",null);s(this,"_reconnectTimer",null);s(this,"_manualClose",!1);s(this,"_repeat",1/0);s(this,"_lockReconnect",!1);s(this,"_heartbeatTimer",null);s(this,"_pongTimer",null);s(this,"_init",()=>{this._reconnectTimer=null,this._manualClose=!1,this._repeat=0,this._lockReconnect=!1,this._heartbeatTimer=null,this._pongTimer=null,this._resetReconnect(),this._resetHeartbeat(),this._connect(),this._onopen(),this._onmessage(),this._onerror(),this._onclose()});s(this,"_connect",()=>{this.ws=new WebSocket(this.url)});s(this,"_onopen",()=>{this.ws&&(this.ws.onopen=()=>{this._checkHeartbeat()})});s(this,"_onmessage",()=>{this.ws&&(this.ws.onmessage=t=>{this._checkHeartbeat(),typeof this.opts.onMessage=="function"&&this.opts.onMessage(t)})});s(this,"_onerror",()=>{this.ws&&(this.ws.onerror=t=>{this._reconnect(),typeof this.opts.onError=="function"&&this.opts.onError(t)})});s(this,"_onclose",()=>{this.ws&&(this.ws.onclose=t=>{var e;this.opts.isReconnect&&!this._manualClose?this._reconnect():(e=this.ws)==null||e.close(),typeof this.opts.close=="function"&&this.opts.close(t)})});s(this,"_reconnect",()=>{var t,e;this._resetHeartbeat(),!(!this.ws||!this.opts.isReconnect||this._lockReconnect||Number((t=this.opts)==null?void 0:t.reconnectRepeat)<=this._repeat||this._manualClose)&&(this._lockReconnect=!0,this._repeat++,this._reconnectTimer=setTimeout(()=>{this._init(),this._lockReconnect=!1},(e=this.opts)==null?void 0:e.reconnectTimeout))});s(this,"_resetReconnect",()=>{this._reconnectTimer&&clearTimeout(this._reconnectTimer)});s(this,"_checkHeartbeat",()=>{this._resetHeartbeat(),this._startHeartbeat()});s(this,"_resetHeartbeat",()=>{this._heartbeatTimer&&clearTimeout(this._heartbeatTimer),this._pongTimer&&clearTimeout(this._pongTimer)});s(this,"_startHeartbeat",()=>{!this.opts.isHeartbeat||!this.opts.isReconnect||(this._heartbeatTimer=setTimeout(()=>{var t;this.ws&&this.ws.readyState===WebSocket.OPEN?this.ws.send(this.opts.pingMsg):(t=this.ws)==null||t.close(),this._pongTimer=setTimeout(()=>{var e;(e=this.ws)==null||e.close()},this.opts.pongTimeout)},this.opts.pingTimeout))});s(this,"sendMessage",t=>{var e;if(this.ws){if(this.ws.readyState===WebSocket.CONNECTING){const c=setInterval(()=>{var n;this.ws&&(this.ws.readyState===WebSocket.OPEN&&((n=this.ws)==null||n.send(t)),this.ws.readyState!==WebSocket.CONNECTING&&clearInterval(c))},100)}this.ws.readyState===WebSocket.OPEN&&((e=this.ws)==null||e.send(t))}});s(this,"close",()=>{var t;this._manualClose=!0,(t=this.ws)==null||t.close()});this.url=t,this.opts={isReconnect:(e==null?void 0:e.isReconnect)||!0,onMessage:e==null?void 0:e.onMessage,onError:e==null?void 0:e.onError,close:e==null?void 0:e.close,reconnectTimeout:(e==null?void 0:e.reconnectTimeout)||300,reconnectRepeat:(e==null?void 0:e.reconnectRepeat)||1/0,isHeartbeat:(e==null?void 0:e.isHeartbeat)||!0,pingMsg:(e==null?void 0:e.pingMsg)||"ping",pingTimeout:(e==null?void 0:e.pingTimeout)||3e4,pongTimeout:(e==null?void 0:e.pongTimeout)||300},this._init()}}return typeof window<"u"&&(window.Socket=i),i});
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.WebSocketWeb = factory());
+})(this, (function () { 'use strict';
+
+    class Socket {
+        url;
+        opts;
+        ws = null;
+        _reconnectTimer = null;
+        _manualClose = false;
+        _repeat = Infinity;
+        _lockReconnect = false;
+        _heartbeatTimer = null;
+        _pongTimer = null;
+        constructor(url, options) {
+            this.url = url;
+            this.opts = {
+                isReconnect: options?.isReconnect || true,
+                onMessage: options?.onMessage,
+                onError: options?.onError,
+                close: options?.close,
+                reconnectTimeout: options?.reconnectTimeout || 300,
+                reconnectRepeat: options?.reconnectRepeat || Infinity,
+                isHeartbeat: options?.isHeartbeat || true,
+                pingMsg: options?.pingMsg || "ping",
+                pingTimeout: options?.pingTimeout || 30000,
+                pongTimeout: options?.pongTimeout || 300,
+            };
+            this._init();
+        }
+        _init = () => {
+            this._reconnectTimer = null;
+            this._manualClose = false;
+            this._repeat = 0;
+            this._lockReconnect = false;
+            this._heartbeatTimer = null;
+            this._pongTimer = null;
+            this._resetReconnect();
+            this._resetHeartbeat();
+            this._connect();
+            this._onopen();
+            this._onmessage();
+            this._onerror();
+            this._onclose();
+        };
+        _connect = () => {
+            this.ws = new WebSocket(this.url);
+        };
+        _onopen = () => {
+            if (!this.ws)
+                return;
+            this.ws.onopen = () => {
+                this._checkHeartbeat();
+            };
+        };
+        _onmessage = () => {
+            if (!this.ws)
+                return;
+            this.ws.onmessage = (event) => {
+                this._checkHeartbeat();
+                if (typeof this.opts.onMessage !== "function")
+                    return;
+                this.opts.onMessage(event);
+            };
+        };
+        _onerror = () => {
+            if (!this.ws)
+                return;
+            this.ws.onerror = (error) => {
+                this._reconnect();
+                if (typeof this.opts.onError !== "function")
+                    return;
+                this.opts.onError(error);
+            };
+        };
+        _onclose = () => {
+            if (!this.ws)
+                return;
+            this.ws.onclose = (event) => {
+                if (this.opts.isReconnect && !this._manualClose) {
+                    this._reconnect();
+                }
+                else {
+                    this.ws?.close();
+                }
+                if (typeof this.opts.close !== "function")
+                    return;
+                this.opts.close(event);
+            };
+        };
+        _reconnect = () => {
+            this._resetHeartbeat();
+            if (!this.ws ||
+                !this.opts.isReconnect ||
+                this._lockReconnect ||
+                Number(this.opts?.reconnectRepeat) <= this._repeat ||
+                this._manualClose) {
+                return;
+            }
+            this._lockReconnect = true;
+            this._repeat++;
+            this._reconnectTimer = setTimeout(() => {
+                this._init();
+                this._lockReconnect = false;
+            }, this.opts?.reconnectTimeout);
+        };
+        _resetReconnect = () => {
+            if (this._reconnectTimer)
+                clearTimeout(this._reconnectTimer);
+        };
+        _checkHeartbeat = () => {
+            this._resetHeartbeat();
+            this._startHeartbeat();
+        };
+        _resetHeartbeat = () => {
+            if (this._heartbeatTimer)
+                clearTimeout(this._heartbeatTimer);
+            if (this._pongTimer)
+                clearTimeout(this._pongTimer);
+        };
+        _startHeartbeat = () => {
+            if (!this.opts.isHeartbeat || !this.opts.isReconnect)
+                return;
+            this._heartbeatTimer = setTimeout(() => {
+                if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                    this.ws.send(this.opts.pingMsg);
+                }
+                else {
+                    this.ws?.close();
+                }
+                this._pongTimer = setTimeout(() => {
+                    this.ws?.close();
+                }, this.opts.pongTimeout);
+            }, this.opts.pingTimeout);
+        };
+        sendMessage = (message) => {
+            if (!this.ws)
+                return;
+            if (this.ws.readyState === WebSocket.CONNECTING) {
+                const sendInterval = setInterval(() => {
+                    if (!this.ws)
+                        return;
+                    if (this.ws.readyState === WebSocket.OPEN)
+                        this.ws?.send(message);
+                    if (this.ws.readyState !== WebSocket.CONNECTING)
+                        clearInterval(sendInterval);
+                }, 100);
+            }
+            if (this.ws.readyState === WebSocket.OPEN) {
+                this.ws?.send(message);
+            }
+        };
+        close = () => {
+            this._manualClose = true;
+            this.ws?.close();
+        };
+    }
+    if (typeof window != "undefined")
+        window.Socket = Socket;
+
+    return Socket;
+
+}));

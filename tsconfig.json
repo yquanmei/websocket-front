@@ -35,7 +35,7 @@
     "src/types/**/*.ts",
     "build/**/*.ts",
     "build/**/*.d.ts",
-    "vite.config.ts"
+    "rollup.config.js"
   ],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }
