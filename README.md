@@ -76,33 +76,33 @@ socket.close()
 
 ## 第一个参数
 
-|--|--|--|--|
-| 名称 | 类型| 描述 | 默认值
-|url | string| websocket 地址
+| 名称 | 类型   | 描述           | 默认值 |
+| ---- | ------ | -------------- | ------ |
+| url  | string | websocket 地址 |
 
 ## 第二个参数对象
 
-|--|--|--|--|
-| 名称 | 类型| 描述 | 默认值
-|isReconnect| boolean |是否需要自动重连 | true
-|reconnectTimeout| number |自动重连间隔时间 | 300ms
-|reconnectRepeat |number |尝试自动重连的次数 | Infinity
-|isHeartbeat| boolean| 是否支持心跳检测 | 是
-|pingMsg|string| 心跳检测发送给后端的消息 | 'ping'
-|pingTimeout| number| 发送心跳检测消息的延迟时间 |30s
-|pongTimeout| number |多长时间没有收到返回的心跳就重启|300ms
+| 名称             | 类型    | 描述                             | 默认值   |
+| ---------------- | ------- | -------------------------------- | -------- |
+| isReconnect      | boolean | 是否需要自动重连                 | true     |
+| reconnectTimeout | number  | 自动重连间隔时间                 | 300ms    |
+| reconnectRepeat  | number  | 尝试自动重连的次数               | Infinity |
+| isHeartbeat      | boolean | 是否支持心跳检测                 | 是       |
+| pingMsg          | string  | 心跳检测发送给后端的消息         | 'ping'   |
+| pingTimeout      | number  | 发送心跳检测消息的延迟时间       | 30s      |
+| pongTimeout      | number  | 多长时间没有收到返回的心跳就重启 | 300ms    |
 
 ### 事件
 
-|--|--|--|--|
-| 名称 | 类型| 描述 | 默认值
-|onMessage | (event:Event) => void | 收到后端返回的消息后的回调
-|onError |(error: Event) => void | 收到错误信息后的回调
-|close| (event: Event) => void | WebSocket 关闭了的回调
+| 名称      | 类型                   | 描述                       | 默认值 |
+| --------- | ---------------------- | -------------------------- | ------ |
+| onMessage | (event:Event) => void  | 收到后端返回的消息后的回调 |
+| onError   | (error: Event) => void | 收到错误信息后的回调       |
+| close     | (event: Event) => void | WebSocket 关闭了的回调     |
 
 ## 方法
 
-|--|--|--|--|
-|事件名称|说明|回调函数
-|sendMessage|向后端发送消息
-|close|关闭 WebSocket
+| 事件名称    | 说明           | 回调函数 |
+| ----------- | -------------- | -------- |
+| sendMessage | 向后端发送消息 |
+| close       | 关闭 WebSocket |
