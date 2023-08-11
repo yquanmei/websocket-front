@@ -1,5 +1,3 @@
-import path from "path";
-
 export default {
   build: {
     lib: {
@@ -7,12 +5,8 @@ export default {
         index: "./src/index.ts",
       },
       name: "index.js",
-      // outDir: "./dist",
       filename: "index.js",
-      // path: path.resolve(__dirname, "dist"),
-      // libraryTarget: "umd",
-      // globalObject: "this",
-      // umdNameDefine: true,
+      libraryTarget: "umd",
     },
   },
   optimization: {

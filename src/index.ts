@@ -21,12 +21,12 @@ class Socket {
   opts: SocketOptions;
   // 类里要用的变量
   private ws: WebSocket | null = null;
-  private _reconnectTimer: any = null;
-  private _manualClose: boolean;
-  private _repeat: number;
-  private _lockReconnect: boolean;
-  private _heartbeatTimer: any;
-  private _pongTimer: any;
+  private _reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private _manualClose: boolean = false;
+  private _repeat: number = Infinity;
+  private _lockReconnect: boolean = false;
+  private _heartbeatTimer: ReturnType<typeof setTimeout> | null = null;
+  private _pongTimer: ReturnType<typeof setTimeout> | null = null;
   constructor(url: string, options: SocketOptions) {
     this.url = url;
     this.opts = {
@@ -42,22 +42,20 @@ class Socket {
       pongTimeout: options?.pongTimeout || 300,
     };
 
-    // 类里要用的变量
-    this._reconnectTimer = null;
-    this._manualClose = false; // 是否是手动关闭
-    this._repeat = 0;
-    this._lockReconnect = false;
-
-    this._heartbeatTimer = null;
-    this._pongTimer = null;
-
     // 初始化
     this._init();
   }
   private _init = () => {
     this._reconnectTimer = null;
+    this._manualClose = false; // 是否是手动关闭
+    this._repeat = 0;
+    this._lockReconnect = false;
     this._heartbeatTimer = null;
-    this._manualClose = false;
+    this._pongTimer = null;
+
+    this._resetReconnect();
+    this._resetHeartbeat();
+
     this._connect();
     this._onopen();
     this._onmessage();
@@ -126,6 +124,9 @@ class Socket {
       this._lockReconnect = false;
     }, this.opts?.reconnectTimeout);
   };
+  private _resetReconnect = () => {
+    if (this._reconnectTimer) clearTimeout(this._reconnectTimer);
+  };
   // 检测心跳
   private _checkHeartbeat = () => {
     this._resetHeartbeat();
@@ -170,7 +171,7 @@ class Socket {
   };
 
   close = () => {
-    this._manualClose = true; // 是手动关闭
+    this._manualClose = true; // 手动关闭
     this.ws?.close();
   };
 }

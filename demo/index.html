@@ -38,7 +38,15 @@
         }
         const date = new Date();
         let div = document.createElement("div");
-        div.innerHTML = "收到消息：" + data + "      " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+        div.innerHTML =
+          "收到消息：" +
+          data +
+          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+          date.getHours() +
+          ":" +
+          date.getMinutes() +
+          ":" +
+          date.getSeconds();
         document.querySelector("#content").append(div);
       }
       // 主动点击关闭

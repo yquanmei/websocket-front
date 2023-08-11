@@ -1,20 +1,20 @@
-var h = Object.defineProperty;
-var n = (r, t, e) => t in r ? h(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
-var s = (r, t, e) => (n(r, typeof t != "symbol" ? t + "" : t, e), e);
+var n = Object.defineProperty;
+var h = (r, t, e) => t in r ? n(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
+var s = (r, t, e) => (h(r, typeof t != "symbol" ? t + "" : t, e), e);
 class a {
   constructor(t, e) {
     s(this, "url");
     s(this, "opts");
     // 类里要用的变量
     s(this, "ws", null);
-    s(this, "_reconnectTimer");
-    s(this, "_manualClose");
-    s(this, "_repeat");
-    s(this, "_lockReconnect");
-    s(this, "_heartbeatTimer");
-    s(this, "_pongTimer");
+    s(this, "_reconnectTimer", null);
+    s(this, "_manualClose", !1);
+    s(this, "_repeat", 1 / 0);
+    s(this, "_lockReconnect", !1);
+    s(this, "_heartbeatTimer", null);
+    s(this, "_pongTimer", null);
     s(this, "_init", () => {
-      this._reconnectTimer = null, this._heartbeatTimer = null, this._manualClose = !1, this._connect(), this._onopen(), this._onmessage(), this._onerror(), this._onclose();
+      this._reconnectTimer = null, this._manualClose = !1, this._repeat = 0, this._lockReconnect = !1, this._heartbeatTimer = null, this._pongTimer = null, this._resetReconnect(), this._resetHeartbeat(), this._connect(), this._onopen(), this._onmessage(), this._onerror(), this._onclose();
     });
     s(this, "_connect", () => {
       this.ws = new WebSocket(this.url);
@@ -47,6 +47,9 @@ class a {
       this._resetHeartbeat(), !(!this.ws || !this.opts.isReconnect || this._lockReconnect || Number((t = this.opts) == null ? void 0 : t.reconnectRepeat) <= this._repeat || this._manualClose) && (this._lockReconnect = !0, this._repeat++, this._reconnectTimer = setTimeout(() => {
         this._init(), this._lockReconnect = !1;
       }, (e = this.opts) == null ? void 0 : e.reconnectTimeout));
+    });
+    s(this, "_resetReconnect", () => {
+      this._reconnectTimer && clearTimeout(this._reconnectTimer);
     });
     // 检测心跳
     s(this, "_checkHeartbeat", () => {
@@ -84,24 +87,20 @@ class a {
       var t;
       this._manualClose = !0, (t = this.ws) == null || t.close();
     });
-    s(this, "closeAll", () => {
-      var t;
-      this._manualClose = !0, (t = this.ws) == null || t.close();
-    });
     this.url = t, this.opts = {
       isReconnect: (e == null ? void 0 : e.isReconnect) || !0,
       onMessage: e == null ? void 0 : e.onMessage,
       onError: e == null ? void 0 : e.onError,
       close: e == null ? void 0 : e.close,
-      reconnectTimeout: (e == null ? void 0 : e.reconnectTimeout) || 1e3,
-      // 重连的时间间隔，默认200毫秒
+      reconnectTimeout: (e == null ? void 0 : e.reconnectTimeout) || 300,
+      // 重连的时间间隔，默认300毫秒
       reconnectRepeat: (e == null ? void 0 : e.reconnectRepeat) || 1 / 0,
       isHeartbeat: (e == null ? void 0 : e.isHeartbeat) || !0,
       pingMsg: (e == null ? void 0 : e.pingMsg) || "ping",
-      pingTimeout: (e == null ? void 0 : e.pingTimeout) || 1e4,
+      pingTimeout: (e == null ? void 0 : e.pingTimeout) || 3e4,
       // 发送心跳的时间间隔，默认30s
       pongTimeout: (e == null ? void 0 : e.pongTimeout) || 300
-    }, this._reconnectTimer = null, this._manualClose = !1, this._repeat = 0, this._lockReconnect = !1, this._heartbeatTimer = null, this._pongTimer = null, this._init();
+    }, this._init();
   }
 }
 typeof window < "u" && (window.Socket = a);
