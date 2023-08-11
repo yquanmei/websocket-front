@@ -1,5 +1,5 @@
 {
-  "name": "websocket-client",
+  "name": "websocket-web",
   "version": "1.0.0",
   "description": "Native websocket in browser",
   "main": "./dist/index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yquanmei/websocket-client.git"
+    "url": "git+https://github.com/yquanmei/websocket-web.git"
   },
   "keywords": [
     "native",
@@ -18,9 +18,13 @@
   "author": "yanquanmei",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yquanmei/websocket-client/issues"
+    "url": "https://github.com/yquanmei/websocket-web/issues"
   },
-  "homepage": "https://github.com/yquanmei/websocket-client#readme",
+  "homepage": "https://github.com/yquanmei/websocket-web#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.3.4",
     "babel-loader": "^9.1.3",
