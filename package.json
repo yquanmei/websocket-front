@@ -1,6 +1,6 @@
 {
   "name": "websocket-web",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Native websocket in browser",
   "main": "./dist/index.js",
   "scripts": {
