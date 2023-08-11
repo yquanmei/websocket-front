@@ -1,7 +1,7 @@
 {
-  "name": "websocket-web",
-  "version": "1.0.2",
-  "description": "Native websocket in browser",
+  "name": "ws-client",
+  "version": "1.0.0",
+  "description": "Native WebSocket client for browser, simple and useful",
   "main": "./dist/index.umd.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yquanmei/websocket-web.git"
+    "url": "git+https://github.com/yquanmei/ws-client.git"
   },
   "keywords": [
     "native",
@@ -20,9 +20,9 @@
   "author": "yanquanmei",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yquanmei/websocket-web/issues"
+    "url": "https://github.com/yquanmei/ws-client/issues"
   },
-  "homepage": "https://github.com/yquanmei/websocket-web#readme",
+  "homepage": "https://github.com/yquanmei/ws-client#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
