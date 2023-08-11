@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="sendMessage()">发送消息</button>
+    <button onclick="closeCurrent()">断开</button>
+    <div id="content"></div>
+    <script type="text/javascript" src="./../dist/index.umd.js"></script>
+    <script type="text/javascript">
+      // ws://127.0.0.1:3001 是启的本地node服务器，需要自行启动 node test/node/server.js
+      const ws = new Socket("ws://127.0.0.1:3001", {
+        onMessage: receiveMessage,
+        pingMsg: JSON.stringify({
+          messageType: "0",
+          content: "ping",
+        }),
+        close: closeCallback,
+      });
+
+      let count = 0;
+
+      function sendMessage() {
+        count++;
+        ws.sendMessage(`这是发送的数据${count}`);
+      }
+      // 这是接收到的数据
+      function receiveMessage(event) {
+        let data = "";
+        // 主要看后端返回的数据格式
+        try {
+          data = JSON.parse(event?.data)?.content || JSON.parse(event?.data)?.data;
+        } catch {
+          data = event?.data || event;
+        }
+        const date = new Date();
+        let div = document.createElement("div");
+        div.innerHTML = "收到消息：" + data + "      " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+        document.querySelector("#content").append(div);
+      }
+      // 主动点击关闭
+      const closeCurrent = () => {
+        ws.close();
+      };
+
+      function closeCallback() {
+        console.log(`%c 外面检测到，关闭了 `, "color: pink;");
+      }
+    </script>
+  </body>
+</html>
