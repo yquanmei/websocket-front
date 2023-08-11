@@ -1,0 +1,37 @@
+{
+  "name": "websocket-front",
+  "version": "1.0.0",
+  "description": "WebSocket client for browser with reconnect and heartbeat",
+  "main": "./dist/index.umd.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yquanmei/websocket-front.git"
+  },
+  "keywords": [
+    "native",
+    "websocket"
+  ],
+  "author": "yanquanmei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yquanmei/websocket-front/issues"
+  },
+  "homepage": "https://github.com/yquanmei/websocket-front#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.2",
+    "rollup": "^3.28.0",
+    "rollup-plugin-dts": "^5.3.1",
+    "tslib": "^2.6.1",
+    "ws": "^8.13.0"
+  }
+}
