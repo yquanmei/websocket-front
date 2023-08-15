@@ -1,4 +1,4 @@
-# websocket-client
+# websocket-front
 
 前端对原生 WebSocket 的封装，默认支持自动重连，支持心跳检测
 
@@ -9,11 +9,11 @@ typescript + rollup
 # 安装
 
 ```
-yarn add websocket-client
+yarn add websocket-front
 
 # 或
 
-npm install websocket-client
+npm install websocket-front
 ```
 
 # 使用
@@ -21,15 +21,15 @@ npm install websocket-client
 ## 最简单的连接：支持自动重连，支持心跳检测
 
 ```
-import WebsocketClient from 'websocket-client';
-const socket = new WebsocketClient('ws://127.0.0.1:3001')
+import Socket from 'websocket-front';
+const socket = new Socket('ws://127.0.0.1:3001')
 ```
 
 ## 配置项
 
 ```
-import WebsocketClient from 'websocket-client';
-const socket = new WebsocketClient('ws://127.0.0.1:3001', {
+import Socket from 'websocket-front';
+const socket = new Socket('ws://127.0.0.1:3001', {
   // 重连
   isReconnect: true,
   reconnectTimeout: 300,
@@ -61,8 +61,8 @@ const closeCallback = (event: Event) => {
 ## 方法
 
 ```
-import WebsocketClient from 'websocket-client';
-const socket = new WebsocketClient('ws://127.0.0.1:3001')
+import Socket from 'websocket-front';
+const socket = new Socket('ws://127.0.0.1:3001')
 
 // 执行某些操作
 socket.sendMessage('发送WebSocket消息');
