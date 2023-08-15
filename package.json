@@ -1,6 +1,6 @@
 {
   "name": "websocket-front",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "WebSocket client for browser with reconnect and heartbeat",
   "main": "./dist/index.umd.js",
   "types": "./dist/index.d.ts",
@@ -33,5 +33,8 @@
     "rollup-plugin-dts": "^5.3.1",
     "tslib": "^2.6.1",
     "ws": "^8.13.0"
+  },
+  "dependencies": {
+    "rollup-plugin-terser": "^7.0.2"
   }
 }
