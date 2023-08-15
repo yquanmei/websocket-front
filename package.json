@@ -1,10 +1,10 @@
 {
   "name": "websocket-front",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "WebSocket client for browser with reconnect and heartbeat",
-  "main": "./dist/index.umd.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.esm.js",
   "type": "module",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup -c"
