@@ -1,24 +1,28 @@
-interface AllOptions {
-  url: string; // websocket 地址
-  onMessage: (event: Event) => void;
-  onError: (error: Event) => void;
-  close: (event: Event) => void;
+interface EventParams {
+  onMessage?: (event: Event) => void;
+  onError?: (error: Event) => void;
+  close?: (event: Event) => void;
+}
+
+interface StrictVariableParams {
   // 重连
-  isReconnect?: boolean; // 是否需要重连
-  reconnectTimeout?: number; // 重连间隔时间
-  reconnectRepeat?: number; // 重连最多执行的次数
+  isReconnect: boolean; // 是否需要重连
+  reconnectTimeout: number; // 重连间隔时间
+  reconnectRepeat: number; // 重连最多执行的次数
   // 心跳检测
   isHeartbeat: boolean;
-  pingMsg: string;
+  pingMsg: string | ArrayBufferLike | Blob | ArrayBufferView;
   pingTimeout: number;
   pongTimeout: number; // 多长时间没有收到返回的心跳就重启
 }
 
-interface SocketOptions extends Omit<AllOptions, "url"> {}
+interface SocketOpts extends EventParams, StrictVariableParams {}
+
+export interface SocketOptions extends EventParams, Partial<StrictVariableParams> {}
 
 class Socket {
   url: string;
-  opts: SocketOptions;
+  opts: SocketOpts;
   // 类里要用的变量
   private ws: WebSocket | null = null;
   private _reconnectTimer: ReturnType<typeof setTimeout> | null = null;
@@ -30,16 +34,16 @@ class Socket {
   constructor(url: string, options: SocketOptions) {
     this.url = url;
     this.opts = {
-      isReconnect: options?.isReconnect || true,
+      isReconnect: options?.isReconnect ?? true,
       onMessage: options?.onMessage,
       onError: options?.onError,
       close: options?.close,
-      reconnectTimeout: options?.reconnectTimeout || 300, // 重连的时间间隔，默认300毫秒
-      reconnectRepeat: options?.reconnectRepeat || Infinity,
-      isHeartbeat: options?.isHeartbeat || true,
-      pingMsg: options?.pingMsg || "ping",
-      pingTimeout: options?.pingTimeout || 30000, // 发送心跳的时间间隔，默认30s
-      pongTimeout: options?.pongTimeout || 300,
+      reconnectTimeout: options?.reconnectTimeout ?? 300, // 重连的时间间隔，默认300毫秒
+      reconnectRepeat: options?.reconnectRepeat ?? Infinity,
+      isHeartbeat: options?.isHeartbeat ?? true,
+      pingMsg: options?.pingMsg ?? "ping",
+      pingTimeout: options?.pingTimeout ?? 30000, // 发送心跳的时间间隔，默认30s
+      pongTimeout: options?.pongTimeout ?? 300,
     };
 
     // 初始化
@@ -78,7 +82,7 @@ class Socket {
     if (!this.ws) return;
     this.ws.onmessage = (event) => {
       this._checkHeartbeat(); // 如果接收到消息了，说明此前连接正常，重新检测心跳
-      if (typeof this.opts.onMessage !== "function") return;
+      if (typeof this.opts?.onMessage !== "function") return;
       this.opts.onMessage(event);
     };
   };
@@ -87,7 +91,7 @@ class Socket {
     if (!this.ws) return;
     this.ws.onerror = (error) => {
       this._reconnect();
-      if (typeof this.opts.onError !== "function") return;
+      if (typeof this.opts?.onError !== "function") return;
       this.opts.onError(error);
     };
   };
@@ -100,7 +104,7 @@ class Socket {
       } else {
         this.ws?.close();
       }
-      if (typeof this.opts.close !== "function") return;
+      if (typeof this.opts?.close !== "function") return;
       this.opts.close(event);
     };
   };

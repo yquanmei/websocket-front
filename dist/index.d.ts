@@ -1,21 +1,24 @@
-interface AllOptions {
-    url: string;
-    onMessage: (event: Event) => void;
-    onError: (error: Event) => void;
-    close: (event: Event) => void;
-    isReconnect?: boolean;
-    reconnectTimeout?: number;
-    reconnectRepeat?: number;
+interface EventParams {
+    onMessage?: (event: Event) => void;
+    onError?: (error: Event) => void;
+    close?: (event: Event) => void;
+}
+interface StrictVariableParams {
+    isReconnect: boolean;
+    reconnectTimeout: number;
+    reconnectRepeat: number;
     isHeartbeat: boolean;
-    pingMsg: string;
+    pingMsg: string | ArrayBufferLike | Blob | ArrayBufferView;
     pingTimeout: number;
     pongTimeout: number;
 }
-interface SocketOptions extends Omit<AllOptions, "url"> {
+interface SocketOpts extends EventParams, StrictVariableParams {
+}
+interface SocketOptions extends EventParams, Partial<StrictVariableParams> {
 }
 declare class Socket {
     url: string;
-    opts: SocketOptions;
+    opts: SocketOpts;
     private ws;
     private _reconnectTimer;
     private _manualClose;
@@ -39,4 +42,4 @@ declare class Socket {
     close: () => void;
 }
 
-export { Socket as default };
+export { SocketOptions, Socket as default };

@@ -4,7 +4,7 @@ Native websocket in browser
 
 # Technology Stack
 
-typescript + vite
+typescript + rollup
 
 # Install
 

@@ -4,7 +4,7 @@
 
 # 技术栈
 
-typescript + vite
+typescript + rollup
 
 # 安装
 
