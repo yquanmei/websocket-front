@@ -1,7 +1,8 @@
 interface EventParams {
+  onOpen?: (event: Event) => void;
   onMessage?: (event: Event) => void;
   onError?: (error: Event) => void;
-  close?: (event: Event) => void;
+  onClose?: (event: Event) => void;
 }
 
 interface StrictVariableParams {
@@ -14,11 +15,20 @@ interface StrictVariableParams {
   pingMsg: string | ArrayBufferLike | Blob | ArrayBufferView;
   pingTimeout: number;
   pongTimeout: number; // 多长时间没有收到返回的心跳就重启
+  // 页面unload时关闭
+  protocols?: string[];
 }
 
 interface SocketOpts extends EventParams, StrictVariableParams {}
 
 export interface SocketOptions extends EventParams, Partial<StrictVariableParams> {}
+
+enum WebSocketStatus {
+  CONNECTING = 0,
+  OPEN = 1,
+  CLOSING = 2,
+  CLOSED = 3,
+}
 
 class Socket {
   url: string;
@@ -34,10 +44,11 @@ class Socket {
   constructor(url: string, options: SocketOptions) {
     this.url = url;
     this.opts = {
+      protocols: options?.protocols ?? [],
       isReconnect: options?.isReconnect ?? true,
       onMessage: options?.onMessage,
       onError: options?.onError,
-      close: options?.close,
+      onClose: options?.onClose,
       reconnectTimeout: options?.reconnectTimeout ?? 300, // 重连的时间间隔，默认300毫秒
       reconnectRepeat: options?.reconnectRepeat ?? Infinity,
       isHeartbeat: options?.isHeartbeat ?? true,
@@ -73,8 +84,10 @@ class Socket {
 
   private _onopen = () => {
     if (!this.ws) return;
-    this.ws.onopen = () => {
+    this.ws.onopen = (event) => {
       this._checkHeartbeat();
+      if (typeof this.opts?.onOpen !== "function") return;
+      this.opts.onOpen(event);
     };
   };
 
@@ -104,8 +117,8 @@ class Socket {
       } else {
         this.ws?.close();
       }
-      if (typeof this.opts?.close !== "function") return;
-      this.opts.close(event);
+      if (typeof this.opts?.onClose !== "function") return;
+      this.opts.onClose(event);
     };
   };
   // ============================ 功能 =============================
@@ -145,9 +158,9 @@ class Socket {
 
   // 开启心跳
   private _startHeartbeat = () => {
-    if (!this.opts.isHeartbeat || !this.opts.isReconnect) return; // this.opts.isReconnect: 如果不支持重连，则不会有心跳检测
+    if (!this.opts.isHeartbeat) return;
     this._heartbeatTimer = setTimeout(() => {
-      if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      if (this.ws && this.ws.readyState === WebSocketStatus.OPEN) {
         this.ws.send(this.opts.pingMsg);
       } else {
         this.ws?.close();
@@ -160,16 +173,16 @@ class Socket {
   };
   // ============================ 业务api =============================
   // 发送消息
-  sendMessage = (message) => {
+  send = (message) => {
     if (!this.ws) return;
-    if (this.ws.readyState === WebSocket.CONNECTING) {
+    if (this.ws.readyState === WebSocketStatus.CONNECTING) {
       const sendInterval = setInterval(() => {
         if (!this.ws) return;
-        if (this.ws.readyState === WebSocket.OPEN) this.ws?.send(message);
-        if (this.ws.readyState !== WebSocket.CONNECTING) clearInterval(sendInterval);
+        if (this.ws.readyState === WebSocketStatus.OPEN) this.ws?.send(message);
+        if (this.ws.readyState !== WebSocketStatus.CONNECTING) clearInterval(sendInterval);
       }, 100);
     }
-    if (this.ws.readyState === WebSocket.OPEN) {
+    if (this.ws.readyState === WebSocketStatus.OPEN) {
       this.ws?.send(message);
     }
   };

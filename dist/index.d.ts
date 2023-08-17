@@ -1,7 +1,8 @@
 interface EventParams {
+    onOpen?: (event: Event) => void;
     onMessage?: (event: Event) => void;
     onError?: (error: Event) => void;
-    close?: (event: Event) => void;
+    onClose?: (event: Event) => void;
 }
 interface StrictVariableParams {
     isReconnect: boolean;
@@ -11,6 +12,7 @@ interface StrictVariableParams {
     pingMsg: string | ArrayBufferLike | Blob | ArrayBufferView;
     pingTimeout: number;
     pongTimeout: number;
+    protocols?: string[];
 }
 interface SocketOpts extends EventParams, StrictVariableParams {
 }
@@ -38,7 +40,7 @@ declare class Socket {
     private _checkHeartbeat;
     private _resetHeartbeat;
     private _startHeartbeat;
-    sendMessage: (message: any) => void;
+    send: (message: any) => void;
     close: () => void;
 }
 
