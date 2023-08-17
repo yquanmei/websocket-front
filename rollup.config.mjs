@@ -21,7 +21,7 @@ export default [
       {
         file: "dist/index.umd.js",
         format: "umd", // UMD 模块化方案
-        name: "WebSocketWeb", // UMD 模块化方案需要指定全局变量名称
+        name: "WebSocketFront", // UMD 模块化方案需要指定全局变量名称
         globalObject: "this",
       },
     ],

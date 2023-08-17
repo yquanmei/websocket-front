@@ -11,21 +11,21 @@
     <div id="content"></div>
     <script type="text/javascript" src="./../dist/index.umd.js"></script>
     <script type="text/javascript">
-      // ws://127.0.0.1:3001 是启的本地node服务器，需要自行启动 node test/node/server.js
+      // ws://127.0.0.1:3001 是启的本地node服务器，需要自行启动 node tests/server/index.js 或 npm run test:back
       const ws = new Socket("ws://127.0.0.1:3001", {
         onMessage: receiveMessage,
         pingMsg: JSON.stringify({
           messageType: "0",
           content: "ping",
         }),
-        close: closeCallback,
+        onClose: closeCallback,
       });
 
       let count = 0;
 
       function sendMessage() {
         count++;
-        ws.sendMessage(`这是发送的数据${count}`);
+        ws.send(`这是发送的数据${count}`);
       }
       // 这是接收到的数据
       function receiveMessage(event) {

@@ -34,7 +34,7 @@
     "src/types/**/*.ts",
     "build/**/*.ts",
     "build/**/*.d.ts",
-    "rollup.config.js"
+    "rollup.config.mjs"
   ],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }
