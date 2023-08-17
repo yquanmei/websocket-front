@@ -45,7 +45,7 @@ const socket = new Socket('ws://127.0.0.1:3001', {
   // 回调
   onMessage: receiveMessage,
   onError: errorCallback,
-  close: closeCallback,
+  onClose: closeCallback,
 })
 const receiveMessage = (message: Event) => {
   console.log('接收到的消息：', message)
@@ -64,10 +64,10 @@ const closeCallback = (event: Event) => {
 import Socket from 'websocket-front';
 const socket = new Socket('ws://127.0.0.1:3001')
 
-// 执行某些操作
+// 发送消息
 socket.send('发送WebSocket消息');
 
-// 执行某些操作
+// 关闭WebSocket
 socket.close()
 
 ```
@@ -82,17 +82,16 @@ socket.close()
 
 ## 第二个参数对象
 
-| 名称                  | 类型    | 描述                             | 默认值   |
-| --------------------- | ------- | -------------------------------- | -------- |
-| isReconnect           | boolean | 是否需要自动重连                 | true     |
-| reconnectTimeout      | number  | 自动重连间隔时间                 | 300ms    |
-| reconnectRepeat       | number  | 尝试自动重连的次数               | Infinity |
-| isHeartbeat           | boolean | 是否支持心跳检测                 | 是       |
-| pingMsg               | string  | 心跳检测发送给后端的消息         | 'ping'   |
-| pingTimeout           | number  | 发送心跳检测消息的延迟时间       | 30s      |
-| pongTimeout           | number  | 多长时间没有收到返回的心跳就重启 | 300ms    |
-| autoCloseBeforeUnload |
-| protocols             |
+| 名称             | 类型     | 描述                             | 默认值   |
+| ---------------- | -------- | -------------------------------- | -------- |
+| isReconnect      | boolean  | 是否需要自动重连                 | true     |
+| reconnectTimeout | number   | 自动重连间隔时间                 | 300ms    |
+| reconnectRepeat  | number   | 尝试自动重连的次数               | Infinity |
+| isHeartbeat      | boolean  | 是否支持心跳检测                 | 是       |
+| pingMsg          | string   | 心跳检测发送给后端的消息         | 'ping'   |
+| pingTimeout      | number   | 发送心跳检测消息的延迟时间       | 30s      |
+| pongTimeout      | number   | 多长时间没有收到返回的心跳就重启 | 300ms    |
+| protocols        | string[] | 指定子协议                       | []       |
 
 ### 事件
 
