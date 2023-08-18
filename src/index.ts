@@ -15,7 +15,6 @@ interface StrictVariableParams {
   pingMsg: string | ArrayBufferLike | Blob | ArrayBufferView;
   pingTimeout: number;
   pongTimeout: number; // 多长时间没有收到返回的心跳就重启
-  // 页面unload时关闭
   protocols?: string[];
 }
 
@@ -30,7 +29,12 @@ enum WebSocketStatus {
   CLOSED = 3,
 }
 
-class Socket {
+export interface SocketInterface {
+  send: (message: string | ArrayBufferLike | Blob | ArrayBufferView) => void;
+  close: () => void;
+}
+
+class Socket implements SocketInterface {
   url: string;
   opts: SocketOpts;
   // 类里要用的变量
