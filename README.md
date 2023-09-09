@@ -33,10 +33,10 @@ const receiveMessage = (message: Event) => {
   console.log('接收到的消息：', message)
 }
 const errorCallback = (error: Event) => {
-  console.log('错误信息', event)
+  console.log('错误信息', error)
 }
 const closeCallback = (event: Event) => {
-  console.log('关闭了')
+  console.log('关闭了', event)
 }
 const socket = new Socket('ws://127.0.0.1:3001', {
   // 重连
