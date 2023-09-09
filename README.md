@@ -29,13 +29,22 @@ const socket = new Socket('ws://127.0.0.1:3001')
 
 ```
 import Socket from 'websocket-front';
+const receiveMessage = (message: Event) => {
+  console.log('接收到的消息：', message)
+}
+const errorCallback = (error: Event) => {
+  console.log('错误信息', event)
+}
+const closeCallback = (event: Event) => {
+  console.log('关闭了')
+}
 const socket = new Socket('ws://127.0.0.1:3001', {
   // 重连
   isReconnect: true,
   reconnectTimeout: 300,
   reconnectRepeat: 5,
   // 心跳检测
-  isHeartbeat: true
+  isHeartbeat: true,
   pingMsg: JSON.stringify({
           messageType: "0",
           content: "ping",
@@ -47,15 +56,6 @@ const socket = new Socket('ws://127.0.0.1:3001', {
   onError: errorCallback,
   onClose: closeCallback,
 })
-const receiveMessage = (message: Event) => {
-  console.log('接收到的消息：', message)
-}
-const errorCallback = (error: Event) => {
-  console.log('错误信息', event)
-}
-const closeCallback = (event: Event) => {
-  console.log('关闭了')
-}
 ```
 
 ## 方法
