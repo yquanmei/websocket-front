@@ -1,6 +1,6 @@
 {
   "name": "websocket-front",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "WebSocket client for browser with reconnect and heartbeat",
   "main": "./dist/index.esm.js",
   "types": "dist/index.d.ts",
