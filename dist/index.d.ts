@@ -18,7 +18,11 @@ interface SocketOpts extends EventParams, StrictVariableParams {
 }
 interface SocketOptions extends EventParams, Partial<StrictVariableParams> {
 }
-declare class Socket {
+interface SocketInterface {
+    send: (message: string | ArrayBufferLike | Blob | ArrayBufferView) => void;
+    close: () => void;
+}
+declare class Socket implements SocketInterface {
     url: string;
     opts: SocketOpts;
     private ws;
@@ -44,4 +48,4 @@ declare class Socket {
     close: () => void;
 }
 
-export { SocketOptions, Socket as default };
+export { SocketInterface, SocketOptions, Socket as default };

@@ -1,9 +1,9 @@
 {
   "name": "websocket-front",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "WebSocket client for browser with reconnect and heartbeat",
   "main": "./dist/index.esm.js",
-  "types": "./dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:back": "node ./tests/server/index.js",
@@ -17,7 +17,8 @@
     "native",
     "websocket",
     "web、front",
-    "js"
+    "js",
+    "前端"
   ],
   "author": "yanquanmei",
   "license": "MIT",
@@ -34,9 +35,8 @@
     "rollup": "^3.28.0",
     "rollup-plugin-dts": "^5.3.1",
     "tslib": "^2.6.1",
-    "ws": "^8.13.0"
-  },
-  "dependencies": {
+    "ws": "^8.13.0",
     "rollup-plugin-terser": "^7.0.2"
-  }
+  },
+  "dependencies": {}
 }

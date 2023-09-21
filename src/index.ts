@@ -54,7 +54,7 @@ class Socket implements SocketInterface {
       onError: options?.onError,
       onClose: options?.onClose,
       reconnectTimeout: options?.reconnectTimeout ?? 300, // 重连的时间间隔，默认300毫秒
-      reconnectRepeat: options?.reconnectRepeat ?? Infinity,
+      reconnectRepeat: options?.reconnectRepeat ?? 3, // 重连次数，默认3，如果是Infinity 则为无数次
       isHeartbeat: options?.isHeartbeat ?? true,
       pingMsg: options?.pingMsg ?? "ping",
       pingTimeout: options?.pingTimeout ?? 30000, // 发送心跳的时间间隔，默认30s

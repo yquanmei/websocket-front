@@ -1,7 +1,7 @@
 .vscode
 demo
 node_modules
-test
+tests
 .gitignore
 package-lock.json
 pnpm-lock.yaml

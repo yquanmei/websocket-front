@@ -29,13 +29,22 @@ const socket = new Socket('ws://127.0.0.1:3001')
 
 ```
 import Socket from 'websocket-front';
+const receiveMessage = (message: Event) => {
+  console.log('接收到的消息：', message)
+}
+const errorCallback = (error: Event) => {
+  console.log('错误信息', error)
+}
+const closeCallback = (event: Event) => {
+  console.log('关闭了', event)
+}
 const socket = new Socket('ws://127.0.0.1:3001', {
   // 重连
   isReconnect: true,
   reconnectTimeout: 300,
   reconnectRepeat: 5,
   // 心跳检测
-  isHeartbeat: true
+  isHeartbeat: true,
   pingMsg: JSON.stringify({
           messageType: "0",
           content: "ping",
@@ -47,15 +56,6 @@ const socket = new Socket('ws://127.0.0.1:3001', {
   onError: errorCallback,
   onClose: closeCallback,
 })
-const receiveMessage = (message: Event) => {
-  console.log('接收到的消息：', message)
-}
-const errorCallback = (error: Event) => {
-  console.log('错误信息', event)
-}
-const closeCallback = (event: Event) => {
-  console.log('关闭了')
-}
 ```
 
 ## 方法
@@ -82,16 +82,16 @@ socket.close()
 
 ## 第二个参数对象
 
-| 名称             | 类型     | 描述                             | 默认值   |
-| ---------------- | -------- | -------------------------------- | -------- |
-| isReconnect      | boolean  | 是否需要自动重连                 | true     |
-| reconnectTimeout | number   | 自动重连间隔时间                 | 300ms    |
-| reconnectRepeat  | number   | 尝试自动重连的次数               | Infinity |
-| isHeartbeat      | boolean  | 是否支持心跳检测                 | 是       |
-| pingMsg          | string   | 心跳检测发送给后端的消息         | 'ping'   |
-| pingTimeout      | number   | 发送心跳检测消息的延迟时间       | 30s      |
-| pongTimeout      | number   | 多长时间没有收到返回的心跳就重启 | 300ms    |
-| protocols        | string[] | 指定子协议                       | []       |
+| 名称             | 类型     | 描述                             | 默认值 |
+| ---------------- | -------- | -------------------------------- | ------ |
+| isReconnect      | boolean  | 是否需要自动重连                 | true   |
+| reconnectTimeout | number   | 自动重连间隔时间                 | 300ms  |
+| reconnectRepeat  | number   | 尝试自动重连的次数               | 3      |
+| isHeartbeat      | boolean  | 是否支持心跳检测                 | 是     |
+| pingMsg          | string   | 心跳检测发送给后端的消息         | 'ping' |
+| pingTimeout      | number   | 发送心跳检测消息的延迟时间       | 30s    |
+| pongTimeout      | number   | 多长时间没有收到返回的心跳就重启 | 300ms  |
+| protocols        | string[] | 指定子协议                       | []     |
 
 ### 事件
 
