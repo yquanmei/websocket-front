@@ -67,7 +67,6 @@ class Socket implements SocketInterface {
   private _init = () => {
     this._reconnectTimer = null;
     this._manualClose = false; // 是否是手动关闭
-    this._repeat = 0;
     this._lockReconnect = false;
     this._heartbeatTimer = null;
     this._pongTimer = null;
@@ -90,6 +89,7 @@ class Socket implements SocketInterface {
     if (!this.ws) return;
     this.ws.onopen = (event) => {
       this._checkHeartbeat();
+      this._repeat = 0;
       if (typeof this.opts?.onOpen !== "function") return;
       this.opts.onOpen(event);
     };
