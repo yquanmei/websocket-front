@@ -89,17 +89,13 @@ class Socket implements SocketInterface {
   private _onopen = () => {
     if (!this.ws) return;
     this.ws.onopen = (event) => {
-      console.log(`%c yqm log, open了::: `, "color: pink;");
       if (this.opts.isHeartbeat) {
         this._checkHeartbeat();
       }
       if (this.opts.isReconnect) {
         this._repeat = 0;
       }
-      console.log(`%c yqm log, this.opts::: `, "color: pink;", this.opts);
-      console.log(`%c yqm log, typeof this.opts?.onOpen::: `, "color: pink;", typeof this.opts?.onOpen);
       if (typeof this.opts?.onOpen !== "function") return;
-      console.log(`%c yqm log, 执行open了::: `, "color: pink;");
       this.opts.onOpen(event);
     };
   };
