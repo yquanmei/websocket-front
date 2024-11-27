@@ -83,7 +83,7 @@ class Socket implements SocketInterface {
   };
 
   private _connect = () => {
-    this.ws = new WebSocket(this.url);
+    this.ws = new WebSocket(this.url, this.opts.protocols);
   };
 
   private _onopen = () => {
